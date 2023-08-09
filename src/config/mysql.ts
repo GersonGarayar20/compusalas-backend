@@ -11,7 +11,10 @@ const conectarPlanetScale = async () => {
 export const getAllProducts = async () => {
   const connection = await conectarPlanetScale()
   try {
-    const [rows] = await connection.query('SELECT * FROM product')
+    const [rows] = await connection.query(`SELECT p.id, p.name, p.image, c.name as category, b.name as brand, p.stock, p.description
+    FROM product p
+    INNER JOIN category c ON p.category = c.id_category
+    INNER JOIN brand b ON p.brand = b.id_brand`)
     /* console.log('resultados del select', rows) */
     return rows
   } catch (error) {
@@ -25,7 +28,10 @@ export const getAllProducts = async () => {
 export const getProductsById = async (id: number) => {
   const connection = await conectarPlanetScale()
   try {
-    const [rows] = await connection.query('SELECT * FROM product WHERE id = ?', [id])
+    const [rows] = await connection.query(`SELECT p.id, p.name, p.image, c.name as category, b.name as brand, p.stock, p.description
+    FROM product p
+    INNER JOIN category c ON p.category = c.id_category
+    INNER JOIN brand b ON p.brand = b.id_brand WHERE p.id = ?`, [id])
     /* console.log('resultados del select', rows) */
     return rows
   } catch (error) {
@@ -39,7 +45,7 @@ export const getProductsById = async (id: number) => {
 export const getAllBrand = async () => {
   const connection = await conectarPlanetScale()
   try {
-    const [rows] = await connection.query('SELECT * FROM brand')
+    const [rows] = await connection.query('SELECT id_brand, name FROM brand;')
     return rows
   } catch (error) {
     console.error('error en el select brands')
@@ -52,7 +58,7 @@ export const getAllBrand = async () => {
 export const getAllCategory = async () => {
   const connection = await conectarPlanetScale()
   try {
-    const [rows] = await connection.query('SELECT * FROM category')
+    const [rows] = await connection.query('SELECT id_category, name FROM category')
     return rows
   } catch (error) {
     console.error('error en el select')
