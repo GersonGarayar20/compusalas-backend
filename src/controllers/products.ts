@@ -5,10 +5,14 @@ import { validarBrand, validarProduct } from '../schemas/productsSchema'
 
 // obtener todos los productos
 export const getAllProducts = async (req: Request, res: Response) => {
-  const products = await allProducts()
-  return res.json({
-    data: products
-  })
+  try {
+    const products = await allProducts()
+    return res.json({
+      data: products
+    })
+  } catch (error) {
+    return res.status(404).json({})
+  }
 }
 
 // obtener un producto por id
@@ -45,6 +49,7 @@ export const getAllCategories = async (req: Request, res: Response) => {
     return res.status(404).json({ message: 'categorias no encontradas' })
   }
 }
+
 // añadir un producto
 export const addProduct = async (req: Request, res: Response) => {
   console.log('entro en la ruta')
