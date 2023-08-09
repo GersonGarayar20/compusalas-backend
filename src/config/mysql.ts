@@ -11,7 +11,7 @@ const conectarPlanetScale = async () => {
 export const getAllProducts = async () => {
   const connection = await conectarPlanetScale()
   try {
-    const [rows] = await connection.query(`SELECT p.id, p.name, p.image, c.name as category, b.name as brand, p.stock, p.description
+    const [rows] = await connection.query(`SELECT p.id, p.name, p.image, c.name as category, b.name as brand, p.price, p.stock, p.description
     FROM product p
     INNER JOIN category c ON p.category = c.id_category
     INNER JOIN brand b ON p.brand = b.id_brand`)
@@ -28,7 +28,7 @@ export const getAllProducts = async () => {
 export const getProductsById = async (id: number) => {
   const connection = await conectarPlanetScale()
   try {
-    const [rows] = await connection.query(`SELECT p.id, p.name, p.image, c.name as category, b.name as brand, p.stock, p.description
+    const [rows] = await connection.query(`SELECT p.id, p.name, p.image, c.name as category, b.name as brand, p.price, p.stock, p.description
     FROM product p
     INNER JOIN category c ON p.category = c.id_category
     INNER JOIN brand b ON p.brand = b.id_brand WHERE p.id = ?`, [id])

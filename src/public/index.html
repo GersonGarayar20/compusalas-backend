@@ -7,5 +7,115 @@
   </head>
   <body>
     <h1>hola mundo</h1>
+    <h2>agregar un producto</h2>
+    <form>
+      <input name="name" type="text" placeholder="nombre" required />
+      <input name="image" type="text" placeholder="imagen" required />
+      <input name="price" type="number" min="0" placeholder="precio" required />
+
+      <select name="brand" id="marcas" required></select>
+
+      <select name="category" id="categorias" required></select>
+      <button>crear</button>
+    </form>
+
+    <table border="1">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Imagen</th>
+          <th>Categoría</th>
+          <th>Marca</th>
+          <th>Precio</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+
+    <script type="module">
+      import {
+        obtenerBrands,
+        obtenerCategories,
+        obtenerProducts,
+        crearProduct,
+      } from "./fetch.js";
+
+      const selectMarca = document.getElementById("marcas");
+      const selectCategoria = document.getElementById("categorias");
+      const tableBody = document.getElementById("tableBody");
+
+      const llenarMarcas = async () => {
+        console.log("llenar select");
+        const { data } = await obtenerBrands();
+        console.log(data);
+
+        data.forEach((el) => {
+          console.log(el);
+
+          selectMarca.innerHTML += `
+          <option value="${el.id_brand}">${el.name}</option>
+          `;
+        });
+      };
+
+      llenarMarcas();
+
+      const llenarCategorias = async () => {
+        console.log("llenar select");
+        const { data } = await obtenerCategories();
+        console.log(data);
+
+        data.forEach((el) => {
+          console.log(el);
+
+          selectCategoria.innerHTML += `
+          <option value="${el.id_category}">${el.name}</option>
+          `;
+        });
+      };
+
+      llenarCategorias();
+
+      const llenarProductos = async () => {
+        console.log("llenar select");
+        const { data } = await obtenerProducts();
+        console.log(data);
+
+        data.forEach((el) => {
+          console.log(el);
+
+          tableBody.innerHTML += `
+          <tr>
+          <td>${el.id}</td>
+          <td>${el.name}</td>
+          <td>
+            <img src="${el.image}" alt="${el.name}" width="50" />
+          </td>
+          <td>${el.category}</td>
+          <td>${el.brand}</td>
+          <td>${el.price}</td>
+        </tr>
+          `;
+        });
+      };
+
+      llenarProductos();
+
+      document.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const producto = {
+          name: e.target.name.value,
+          image: e.target.image.value,
+          price: +e.target.price.value,
+          brand: +e.target.brand.value,
+          category: +e.target.category.value,
+        };
+        console.log(producto);
+        crearProduct(producto);
+        llenarProductos();
+      });
+    </script>
   </body>
 </html>
