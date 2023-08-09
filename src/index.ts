@@ -1,17 +1,12 @@
 import './config/dotenv'
 
-import express, { Express, Request, Response } from 'express'
+import express, { Express } from 'express'
 import { products } from './routes/v1/products'
-/* import './bd/sqlite' */
 
 const app: Express = express()
 app.use(express.json())
 
-app.use('/products', products)
-
-app.get('/', (req: Request, res: Response) => {
-  res.send('Express + TypeScript Server hola')
-})
+app.use('/api/v1', products)
 
 const port = process.env.port ?? 4000
 

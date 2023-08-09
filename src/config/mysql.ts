@@ -1,6 +1,7 @@
 import mysql from 'mysql2/promise'
 
 const conexionString = process.env.DATABASE_URL ?? ''
+
 const conectarPlanetScale = async () => {
   console.log('conexion a PlanetScale')
   return await mysql.createConnection(conexionString)
@@ -34,20 +35,20 @@ export const getProductsById = async (id: number) => {
   }
 }
 
-// obtener todas las marcas o categorias
+// obtener todas las marcas
 export const getAllBrand = async () => {
   const connection = await conectarPlanetScale()
   try {
     const [rows] = await connection.query('SELECT * FROM brand')
     return rows
   } catch (error) {
-    console.error('error en el select')
+    console.error('error en el select brands')
   } finally {
     await connection.end()
   }
 }
 
-// obtener todas las categorias o categorias
+// obtener todas las categorias
 export const getAllCategory = async () => {
   const connection = await conectarPlanetScale()
   try {
@@ -77,10 +78,39 @@ export const verifyBrand = async (name: string) => {
 // buscar categoria
 // si no existe categoria crear una
 
+// crear una marca
+export const addBrand = async (name: string) => {
+  const connection = await conectarPlanetScale()
+  try {
+    const [result] = await connection.execute('INSERT IGNORE INTO brand (name) VALUES (?)', [name])
+    return result
+  } catch (error) {
+    console.error('error al insertar una marca')
+  } finally {
+    await connection.end()
+  }
+}
+
+// crear una categoria
+export const addCategory = async (name: string) => {
+  const connection = await conectarPlanetScale()
+  try {
+    const [result] = await connection.execute('INSERT IGNORE INTO category (name) VALUES (?)', [name])
+    console.log('-->', result)
+    return result
+  } catch (error) {
+    console.error('error al insertar una marca')
+  } finally {
+    await connection.end()
+  }
+}
+
 // crear un producto
 export const addProduct = async (product: any) => {
   const connection = await conectarPlanetScale()
   try {
+    console.log('product->', product)
+
     const [result] = await connection.execute('INSERT INTO product (name, image, category, brand, price, stock, description) VALUES (?,?,?,?,?,?,?)', [
       product.name,
       product.image,
@@ -115,7 +145,6 @@ export const updateProduct = async (id: number, product: any) => {
       }
 
       // actualizar el producto
-
       await connection.execute('UPDATE product SET name = ?, image = ?, category = ?, brand = ?, price = ?, stock = ?, description = ? WHERE id = ?', [
         newProduct.name,
         newProduct.image,
