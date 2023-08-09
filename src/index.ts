@@ -1,11 +1,8 @@
+import './config/dotenv'
+
 import express, { Express, Request, Response } from 'express'
-import dotenv from 'dotenv'
-
-import './bd/sqlite'
-
 import { products } from './routes/v1/products'
-
-dotenv.config()
+/* import './bd/sqlite' */
 
 const app: Express = express()
 app.use(express.json())

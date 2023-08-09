@@ -57,8 +57,6 @@ export const createCategoria = (name: string) => {
   })
 }
 
-// createCategoria('ssd')
-
 // crear un fabricante
 export const createFabricante = (name: string) => {
   db.serialize(() => {
@@ -78,5 +76,3 @@ export const crearComponente = (name: string, idCategory: number, idFabricante: 
     db.close()
   })
 }
-
-/* crearComponente('ssd', 2, 1, 120) */

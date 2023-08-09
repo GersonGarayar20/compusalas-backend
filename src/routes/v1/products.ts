@@ -6,3 +6,5 @@ export const products = Router()
 products
   .get('/', getAllProducts)
   .get('/:id', getProduct)
+  /* .post("/", ()=>())
+  .patch("/:id", ()=>()) */
